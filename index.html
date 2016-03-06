@@ -1,0 +1,122 @@
+<html>
+<head>
+<title> led test </title>
+<style>
+body {
+  background-color: rgb(127,127,127) !important;
+  font-size: 14px;
+  margin: 0px;
+  padding: 0px;
+  position: absolute;
+  width:1280px;
+  height:720px;
+  left:0px;
+  top: 0px;
+}
+button:focus
+{
+  background-color:#555555;
+}
+
+.buttonstyle{
+  height: 40px;
+  width: 320px;
+  outline: none;
+}
+
+.hidebtn {
+  display:none
+}
+
+</style>
+
+</head>
+<body>
+
+  <script>
+    var xhr;
+function turn_light(which, state) {
+  var logger = document.getElementById('logger');
+  xhr = new XMLHttpRequest();
+  xhr.onreadystatechange=function() {
+    if (xhr.readyState == 4 && xhr.status == 200) {
+      document.getElementById("logger").innerHTML = xhr.responseText;
+    } else {
+     document.getElementById("logger").innerHTML = "readystate = " + xhr.readyState;
+   }
+  };
+  var str = "php_server.php?which_led="
+  if (state == true) {
+    str2 = str + which.toString() + "&led=on";
+    xhr.open("GET",str2, true);
+    logger.innerHTML += 'the light is turned on' + "<br>";
+  }else{
+    str2 = str + which.toString() + "&led=off";
+    xhr.open("GET",str2, true);
+  }
+  logger.innerHTML += str2 + "<br>";
+  xhr.send();
+}
+  function changeImage(e, self ) {
+    var on;
+    if (self.src.match("bulbon")) {
+        self.src = "pic_bulboff.gif";
+        on = false;
+    } else {
+        self.src = "pic_bulbon.gif";
+        on = true;
+    }
+    if ('light1' == self.id){
+     // document.lightform1.submit();
+      turn_light(1, on);
+    } else if ('light2' == self.id) {
+      turn_light(2, on);
+//      document.lightform2.submit();
+    } else if ('light3' == self.id) {
+        turn_light(3, on);
+//      document.lightform3.submit();
+    } else {
+//      document.getElementById('logger').innerHTML += "not found light form"
+    }
+    return false;
+}
+</script>
+
+<form method="" name="lightform1" onsubmit="return false">
+<div>
+<input type="hidden" name="led_cmd" value="1 off">
+<input type="hidden" name="led_cmd" value="1 on">
+<img id='light1' src="pic_bulboff.gif" border="0" onclick="changeImage(event,this)" width="50" height="70"">
+</div>
+</form>
+<br>
+<form method="" name="lightform2" >
+<div>
+<input type="hidden" name="led_cmd" value="2 off">
+<input type="hidden" name="led_cmd" value="2 on">
+<img id='light2' src="pic_bulboff.gif" border="0" onclick="changeImage(event, this)" width="50" height="70"">
+</div>
+</form>
+<br>
+<form method="" name="lightform3" action="">
+<div>
+<input type="hidden" name="led_cmd" value="3 off">
+<input type="hidden" name="led_cmd" value="3 on">
+<img id='light3' src="pic_bulboff.gif" border="0" onclick="changeImage(event, this)" width="50" height="70"">
+</div>
+</form>
+
+<form method="" name="lightformall" action="">
+<div>
+<input type="button" name="led_cmd" onclick="turn_light('looping', false)" value="OFF">
+<input type="button" name="led_cmd" onclick="turn_light('looping', true)" value="ON">
+</div>
+</form>
+
+<br><br><br><br><br>
+ <button class="buttonstyle" type="button" onclick="window.location = 'http://101.231.181.10/phptest/php_index2.html'">Reload Window</button><br>
+<div id="logger" style="position:absolute;left: 500px;top:50px "> </div>
+
+</body>
+
+</html>
