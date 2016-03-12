@@ -22,10 +22,6 @@ response=proc.stdout.read();
 print("after read");
 print("response %s", response);
 '''
-arg_len = len(sys.argv)
-g_led_on = False
-g_led_looping = False
-g_led_which = 1
 
 setting = GPIOSetting()
 setting.setMode(GPIO.BOARD)
@@ -37,7 +33,6 @@ setting.setOutPin3(40, GPIO.OUT)
 
 ledCtrl = LedControl()
 
-print "enter python \r",
 for arg in sys.argv:
   if arg == 'looping':
     ledCtrl.setLed(0) #looping
@@ -47,8 +42,6 @@ for arg in sys.argv:
     ledCtrl.setLed(2)
   if arg == '3':
     ledCtrl.setLed(3)
-
-  print("which led %d\r", ledCtrl.getLed()),
 
   if arg == 'on':
     ledCtrl.setState(True)
@@ -69,8 +62,8 @@ procCtrl.writePidToFile(file_location, getpid())
 
 def led_reset():
 #    print("@@@ enter reset led\n")
-    ledCtrl.setState(True)
-    ledCtrl.setLed(0)
+#    ledCtrl.setState(True)
+#    ledCtrl.setLed(0)
     GPIO.output(setting.getOutPin1(), GPIO.LOW)
     GPIO.output(setting.getOutPin2(), GPIO.LOW)
     GPIO.output(setting.getOutPin3(), GPIO.LOW)
