@@ -60,10 +60,10 @@ function turn_light(which, state) {
   function changeImage(e, self ) {
     var on;
     if (self.src.match("bulbon")) {
-        self.src = "pic_bulboff.gif";
+        self.src = "images/pic_bulboff.gif";
         on = false;
     } else {
-        self.src = "pic_bulbon.gif";
+        self.src = "images/pic_bulbon.gif";
         on = true;
     }
     if ('light1' == self.id){
@@ -86,7 +86,7 @@ function turn_light(which, state) {
 <div>
 <input type="hidden" name="led_cmd" value="1 off">
 <input type="hidden" name="led_cmd" value="1 on">
-<img id='light1' src="pic_bulboff.gif" border="0" onclick="changeImage(event,this)" width="50" height="70"">
+<img id='light1' src="images/pic_bulboff.gif" border="0" onclick="changeImage(event,this)" width="50" height="70"">
 </div>
 </form>
 <br>
@@ -94,7 +94,7 @@ function turn_light(which, state) {
 <div>
 <input type="hidden" name="led_cmd" value="2 off">
 <input type="hidden" name="led_cmd" value="2 on">
-<img id='light2' src="pic_bulboff.gif" border="0" onclick="changeImage(event, this)" width="50" height="70"">
+<img id='light2' src="images/pic_bulboff.gif" border="0" onclick="changeImage(event, this)" width="50" height="70"">
 </div>
 </form>
 <br>
@@ -102,7 +102,7 @@ function turn_light(which, state) {
 <div>
 <input type="hidden" name="led_cmd" value="3 off">
 <input type="hidden" name="led_cmd" value="3 on">
-<img id='light3' src="pic_bulboff.gif" border="0" onclick="changeImage(event, this)" width="50" height="70"">
+<img id='light3' src="images/pic_bulboff.gif" border="0" onclick="changeImage(event, this)" width="50" height="70"">
 </div>
 </form>
 
