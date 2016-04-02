@@ -17,15 +17,54 @@ import thread
 import psutil
 import subprocess
 from os import getpid
-'''
-method="notify_led_state"
-proc=subprocess.Popen(['sudo php -f /var/www/phptest/php_server.php '+method],shell=True,stdout=subprocess.PIPE);
-print("after popen");
-response=proc.stdout.read();
-print("after read");
-print("response %s", response);
-'''
+from subprocess import Popen,PIPE,STDOUT
+import urllib
+import MySQLdb
 
+
+class Database:
+
+    host = 'localhost'
+    user = 'root'
+    password = 'pi'
+    db = 'led'
+
+    def __init__(self):
+        self.connection = MySQLdb.connect(self.host, self.user, self.password, self.db)
+        self.cursor = self.connection.cursor()
+        print self.connection
+    def insert(self, query):
+        try:
+            self.cursor.execute(query)
+            self.connection.commit()
+        except:
+            self.connection.rollback()
+
+
+
+    def query(self, query):
+        cursor = self.connection.cursor( MySQLdb.cursors.DictCursor )
+        cursor.execute(query)
+
+        return cursor.fetchall()
+
+    def __del__(self):
+        self.connection.close()
+
+def notify_server(db, id, newstate):
+  cmd = "UPDATE tb_led SET state='%s'  WHERE id='%s'" % (newstate, id)
+#  cmd = "update tb_led set state='off' where id='light2'"
+  print cmd
+  db.insert(cmd)
+'''
+  method="notify_led_state";
+  cmd = 'php -f ./php_server.php' + ' ' +  method + ' ' + id + ' ' + state;
+  proc=subprocess.Popen([cmd],shell=True,stdout=subprocess.PIPE);
+
+  response=proc.stdout.read();
+
+  print(response);
+'''
 setting = GPIOSetting()
 setting.setMode(GPIO.BOARD)
 setting.setWarnings(False)
@@ -35,12 +74,14 @@ Led2 = Led(18)
 Led3 = Led(40)
 
 ledCtrl = LedControl()
+db = Database()
 
 for arg in sys.argv:
   if arg == 'looping':
     ledCtrl.setLed(0) #looping
   if arg == '1':
     ledCtrl.setLed(1)
+
   if arg == '2':
     ledCtrl.setLed(2)
   if arg == '3':
@@ -93,23 +134,29 @@ if ledCtrl.getLed() == 1:
   if ledCtrl.getState() == True:
     print("@@@ light 1\n")
     Led1.changeState(GPIO.HIGH)
+    notify_server(db, 'light1', 'on')
   else:
     print("@@@ light 1 off")
     Led1.changeState(GPIO.LOW)
+    notify_server(db, 'light1', 'off')
 
 if ledCtrl.getLed() == 2:
   if ledCtrl.getState() == True:
     print("@@@ light 2\n")
     Led2.changeState(GPIO.HIGH)
+    notify_server(db, 'light2', 'on')
   else:
     Led2.changeState(GPIO.LOW)
+    notify_server(db, 'light2', 'off')
 
 if ledCtrl.getLed() == 3:
   if ledCtrl.getState() == True:
     print("@@@ light 3\n")
     Led3.changeState(GPIO.HIGH)
+    notify_server(db, 'light3', 'on')
   else:
     Led3.changeState(GPIO.LOW)
+    notify_server(db, 'light3', 'off')
 
 if ledCtrl.getLed() == 0 and ledCtrl.getState() == True:
   blink()

@@ -33,18 +33,19 @@ button:focus
 </head>
 <body>
 
-  <script>
-    var xhr;
+<script>
 function turn_light(which, state) {
   var logger = document.getElementById('logger');
-  xhr = new XMLHttpRequest();
+  var xhr = new XMLHttpRequest();
   xhr.onreadystatechange=function() {
     if (xhr.readyState == 4 && xhr.status == 200) {
-      document.getElementById("logger").innerHTML = xhr.responseText;
-    } else {
-     document.getElementById("logger").innerHTML = "readystate = " + xhr.readyState;
-   }
-  };
+      var str = 'light' + which;
+      change_img(str, xhr.responseText);
+      } else {
+//     document.getElementById("logger").innerHTML = "readystate = " + xhr.readyState;
+      }
+  }
+
   var str = "php_server.php?which_led="
   if (state == true) {
     str2 = str + which.toString() + "&led=on";
@@ -57,28 +58,43 @@ function turn_light(which, state) {
   logger.innerHTML += str2 + "<br>";
   xhr.send();
 }
-  function changeImage(e, self ) {
-    var on;
-    if (self.src.match("bulbon")) {
-        self.src = "images/pic_bulboff.gif";
-        on = false;
+
+function change_img(id, state) {
+
+    console.log("which id = " +id)
+    var light = document.getElementById(id);
+    console.log(light);
+    if (state == "on") {
+       light.src="images/pic_bulbon.gif";
     } else {
-        self.src = "images/pic_bulbon.gif";
-        on = true;
+      light.src="images/pic_bulboff.gif";
     }
-    if ('light1' == self.id){
-     // document.lightform1.submit();
+}
+
+function changeImage(e, self ) {
+  var on;
+  if (self.src.match("bulbon")) {
+    on = false;
+   } else {
+     on = true;
+   }
+
+   if ('light1' == self.id){
       turn_light(1, on);
     } else if ('light2' == self.id) {
       turn_light(2, on);
-//      document.lightform2.submit();
     } else if ('light3' == self.id) {
         turn_light(3, on);
-//      document.lightform3.submit();
     } else {
-//      document.getElementById('logger').innerHTML += "not found light form"
+      document.getElementById('logger').innerHTML += "not found light form"
     }
     return false;
+  }
+
+function turn_on_all_lights(on) {
+  for (var i = 0; i < 3; i++) {
+    turn_light(i, on);
+  }
 }
 </script>
 
@@ -108,8 +124,8 @@ function turn_light(which, state) {
 
 <form method="" name="lightformall" action="">
 <div>
-<input type="button" name="led_cmd" onclick="turn_light('looping', false)" value="OFF">
-<input type="button" name="led_cmd" onclick="turn_light('looping', true)" value="ON">
+<input type="button" name="led_cmd" onclick="turn_on_all_lights(false)" value="OFF">
+<input type="button" name="led_cmd" onclick="turn_on_all_lights(true)" value="ON">
 </div>
 </form>
 
