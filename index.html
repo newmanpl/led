@@ -40,6 +40,7 @@ function turn_light(lightX, state) {
   xhr.onreadystatechange=function() {
     if (xhr.readyState == 4 && xhr.status == 200) {
       change_img(lightX, xhr.responseText);
+      logger.innerHTML += 'the light is turned ' + xhr.responseText + "<br>";
       } else {
 //     document.getElementById("logger").innerHTML = "readystate = " + xhr.readyState;
       }
@@ -49,7 +50,6 @@ function turn_light(lightX, state) {
   if (state == true) {
     str2 = str + lightX + "&led=on";
     xhr.open("GET",str2, true);
-    logger.innerHTML += 'the light is turned on' + "<br>";
   }else{
     str2 = str + lightX + "&led=off";
     xhr.open("GET",str2, true);
