@@ -1,16 +1,17 @@
 <?php
-  $led_which = $_GET['which_led'];
-  $led_state = $_GET['led'];
-  if(!empty($led_which))
-    $cmd = "sudo ./ledmain.py " . $led_which . " " . $led_state . " >/dev/null 2>&1 &";
-    //echo "$cmd";
-    /*echo*/  exec($cmd);
-    usleep(500*1000); //sleep 100 ms
-
-  $con = mysqli_connect('192.168.8.133', 'root', 'pi', 'led');
+$lightX = $_GET['which_led'];
+$led_state = $_GET['led'];
+//  $cur_time = microtime(true);
+$con = mysqli_connect('192.168.8.133', 'root', 'pi', 'led');
+if(!empty($lightX)) {
+  //$cur_time = round(microtime(true) * 1000);
+    $cmd = "sudo ./ledmain.py " . $lightX . " " . $led_state . " >/dev/null 2>&1 &";
+  //print_r("cur_time " . $cur_time);
+  //echo "$cmd";
+    /*echo*/  system($cmd);
+    usleep(550*1000); //sleep 100 ms
     if ($con) {
-    $tolight = 'light' . $led_which;
-    $sql = "SELECT state FROM tb_led WHERE id='$tolight'";
+    $sql = "SELECT state FROM tb_led WHERE id='$lightX'";
     $result = mysqli_query($con, $sql);
 
     if (false == $result) {
@@ -23,6 +24,8 @@
   } else {
     echo "error to get led state";
   }
+}
+
 function parseArgs($args) {
   foreach($args as $arg) {
     if ($arg == 'notify_led_state') {

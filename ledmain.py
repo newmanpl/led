@@ -20,7 +20,7 @@ from os import getpid
 from subprocess import Popen,PIPE,STDOUT
 import urllib
 import MySQLdb
-
+import datetime
 
 class Database:
 
@@ -50,12 +50,15 @@ class Database:
 
     def __del__(self):
         self.connection.close()
-
+def TimestampMillisec64():
+      return int((datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1)).total_seconds() * 1000)
 def notify_server(db, id, newstate):
   cmd = "UPDATE tb_led SET state='%s'  WHERE id='%s'" % (newstate, id)
 #  cmd = "update tb_led set state='off' where id='light2'"
   print cmd
   db.insert(cmd)
+#  time_diff_file = '/var/www/phptest/timediff.txt'
+#  procCtrl.writePidToFile(time_diff_file, TimestampMillisec64())
 '''
   method="notify_led_state";
   cmd = 'php -f ./php_server.php' + ' ' +  method + ' ' + id + ' ' + state;
@@ -65,6 +68,10 @@ def notify_server(db, id, newstate):
 
   print(response);
 '''
+procCtrl = ProcessControl()
+time_diff_file = '/var/www/phptest/timediff.txt'
+procCtrl.writePidToFile(time_diff_file, TimestampMillisec64())
+
 setting = GPIOSetting()
 setting.setMode(GPIO.BOARD)
 setting.setWarnings(False)
@@ -79,12 +86,12 @@ db = Database()
 for arg in sys.argv:
   if arg == 'looping':
     ledCtrl.setLed(0) #looping
-  if arg == '1':
+  if arg == 'light1':
     ledCtrl.setLed(1)
 
-  if arg == '2':
+  if arg == 'light2':
     ledCtrl.setLed(2)
-  if arg == '3':
+  if arg == 'light3':
     ledCtrl.setLed(3)
 
   if arg == 'on':
@@ -94,7 +101,7 @@ for arg in sys.argv:
 
 file_location = '/var/www/phptest/proc'
 
-procCtrl = ProcessControl()
+#procCtrl = ProcessControl()
 
 pid = procCtrl.readPidFromFile(file_location)
 if pid != 0:
