@@ -29,11 +29,16 @@ button:focus
 }
 
 </style>
-
 </head>
-<body>
 
+<body>
 <script>
+var num = 3;
+function sleepFor( sleepDuration ){
+    var now = new Date().getTime();
+    while(new Date().getTime() < now + sleepDuration){ /* do nothing */ }
+}
+
 function turn_light(lightX, state) {
   var logger = document.getElementById('logger');
   var xhr = new XMLHttpRequest();
@@ -77,50 +82,52 @@ function changeImage(e, self ) {
    } else {
      on = true;
    }
+   console.log("++++ id " + self.id);
    turn_light(self.id, on);
 }
 function turn_on_all_lights(on) {
-  for (var i = 0; i < 3; i++) {
-    turn_light(i, on);
+  console.log("turn on all lights " + on)
+  for (var i = 0; i < num; i++) {
+    var lightX = "light" + (i+1) ;
+    turn_light(lightX, on);
   }
 }
+function reset() {
+  turn_on_all_lights (false);
+  window.location.reload();
+}
+
 </script>
 
-<form method="" name="lightform1" onsubmit="return false">
 <div>
-<input type="hidden" name="led_cmd" value="1 off">
-<input type="hidden" name="led_cmd" value="1 on">
+<input type="hidden" >
+<input type="hidden" >
 <img id='light1' src="images/pic_bulboff.gif" border="0" onclick="changeImage(event,this)" width="50" height="70"">
 </div>
-</form>
 <br>
-<form method="" name="lightform2" >
+
 <div>
-<input type="hidden" name="led_cmd" value="2 off">
-<input type="hidden" name="led_cmd" value="2 on">
+<input type="hidden">
+<input type="hidden">
 <img id='light2' src="images/pic_bulboff.gif" border="0" onclick="changeImage(event, this)" width="50" height="70"">
 </div>
-</form>
 <br>
-<form method="" name="lightform3" action="">
+
 <div>
-<input type="hidden" name="led_cmd" value="3 off">
-<input type="hidden" name="led_cmd" value="3 on">
+<input type="hidden">
+<input type="hidden">
 <img id='light3' src="images/pic_bulboff.gif" border="0" onclick="changeImage(event, this)" width="50" height="70"">
 </div>
-</form>
+<br>
 
-<form method="" name="lightformall" action="">
 <div>
-<input type="button" name="led_cmd" onclick="turn_on_all_lights(false)" value="OFF">
-<input type="button" name="led_cmd" onclick="turn_on_all_lights(true)" value="ON">
+<input type="button" onclick="turn_on_all_lights(false)" value="ALL OFF">
+<input type="button" onclick="turn_on_all_lights(true)" value="ALL ON">
 </div>
-</form>
+<br>
 
-<br><br><br><br><br>
- <button class="buttonstyle" type="button" onclick="window.location.reload()">Reload Window</button><br>
+ <button class="buttonstyle" type="button" onclick="reset()">Reload Window</button><br>
 <div id="logger" style="position:absolute;left: 500px;top:50px "> </div>
-
 </body>
 
 </html>
