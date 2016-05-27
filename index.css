@@ -1,0 +1,26 @@
+body {
+  background-color: rgb(127,127,127) !important;
+  font-size: 14px;
+  margin: 0px;
+  padding: 0px;
+  position: absolute;
+  width:1280px;
+  height:720px;
+  left:0px;
+  top: 0px;
+}
+button:focus
+{
+  background-color:#555555;
+}
+
+.buttonstyle{
+  height: 40px;
+  width: 320px;
+  outline: none;
+}
+
+.hidebtn {
+  display:none
+}
+

@@ -1,34 +1,7 @@
 <html>
 <head>
-<title> led test </title>
-<style>
-body {
-  background-color: rgb(127,127,127) !important;
-  font-size: 14px;
-  margin: 0px;
-  padding: 0px;
-  position: absolute;
-  width:1280px;
-  height:720px;
-  left:0px;
-  top: 0px;
-}
-button:focus
-{
-  background-color:#555555;
-}
-
-.buttonstyle{
-  height: 40px;
-  width: 320px;
-  outline: none;
-}
-
-.hidebtn {
-  display:none
-}
-
-</style>
+  <title> led test </title>
+  <link rel="stylesheet" type="text/css" href="index.css" >
 </head>
 
 <body>
@@ -39,6 +12,9 @@ function sleepFor( sleepDuration ){
     while(new Date().getTime() < now + sleepDuration){ /* do nothing */ }
 }
 
+var count = 0;
+var alllights = false;
+
 function turn_light(lightX, state) {
   var logger = document.getElementById('logger');
   var xhr = new XMLHttpRequest();
@@ -46,9 +22,13 @@ function turn_light(lightX, state) {
     if (xhr.readyState == 4 && xhr.status == 200) {
       change_img(lightX, xhr.responseText);
       logger.innerHTML += 'the light is turned ' + xhr.responseText + "<br>";
-      } else {
-//     document.getElementById("logger").innerHTML = "readystate = " + xhr.readyState;
-      }
+      if (xhr.responseText == 'on' ) {
+         document.getElementById("logger").innerHTML = "turn off all";
+         turn_on_all_lights(false);
+         } else if (xhr.responseText == 'off') {
+           turn_on_all_lights(true);
+         }
+     }
   }
 
   var str = "php_server.php?which_led="
@@ -87,6 +67,7 @@ function changeImage(e, self ) {
 }
 function turn_on_all_lights(on) {
   console.log("turn on all lights " + on)
+  alllights = on;
   for (var i = 0; i < num; i++) {
     var lightX = "light" + (i+1) ;
     turn_light(lightX, on);
