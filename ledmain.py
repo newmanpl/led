@@ -69,16 +69,16 @@ def notify_server(db, id, newstate):
   print(response);
 '''
 procCtrl = ProcessControl()
-time_diff_file = '/var/www/phptest/timediff.txt'
-procCtrl.writePidToFile(time_diff_file, TimestampMillisec64())
+#time_diff_file = '/var/www/html/led/timediff.txt'
+#procCtrl.writePidToFile(time_diff_file, TimestampMillisec64())
 
 setting = GPIOSetting()
 setting.setMode(GPIO.BOARD)
 setting.setWarnings(False)
 
-Led1 = Led(16)
-Led2 = Led(18)
-Led3 = Led(40)
+Led1 = Led(33)
+Led2 = Led(35)
+Led3 = Led(37)
 
 ledCtrl = LedControl()
 db = Database()
@@ -99,7 +99,7 @@ for arg in sys.argv:
   else:
     ledCtrl.setState(False)
 
-file_location = '/var/www/phptest/proc'
+file_location = '/var/www/html/led/proc'
 
 #procCtrl = ProcessControl()
 

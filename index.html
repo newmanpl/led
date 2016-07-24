@@ -22,12 +22,12 @@ function turn_light(lightX, state) {
     if (xhr.readyState == 4 && xhr.status == 200) {
       change_img(lightX, xhr.responseText);
       logger.innerHTML += 'the light is turned ' + xhr.responseText + "<br>";
-      if (xhr.responseText == 'on' ) {
-         document.getElementById("logger").innerHTML = "turn off all";
-         turn_on_all_lights(false);
-         } else if (xhr.responseText == 'off') {
-           turn_on_all_lights(true);
-         }
+//      if (xhr.responseText == 'on' ) {
+//         document.getElementById("logger").innerHTML = "turn off all";
+//         turn_on_all_lights(false);
+//         } else if (xhr.responseText == 'off') {
+//           turn_on_all_lights(true);
+//         }
      }
   }
 

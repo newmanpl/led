@@ -2,10 +2,10 @@
 $lightX = $_GET['which_led'];
 $led_state = $_GET['led'];
 //  $cur_time = microtime(true);
-$con = mysqli_connect('192.168.8.133', 'root', 'pi', 'led');
+$con = mysqli_connect('192.168.10.166', 'led', 'access102', 'led');
 if(!empty($lightX)) {
   //$cur_time = round(microtime(true) * 1000);
-    $cmd = "sudo ./ledmain.py " . $lightX . " " . $led_state . " >/dev/null 2>&1 &";
+    $cmd = "sudo python ./ledmain.py " . $lightX . " " . $led_state . " >/dev/null 2>&1 &";
   //print_r("cur_time " . $cur_time);
   //echo "$cmd";
     /*echo*/  system($cmd);
