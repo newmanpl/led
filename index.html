@@ -78,6 +78,58 @@ function reset() {
   window.location.reload();
 }
 
+function forceReboot() {
+  console.log(">> force reboot");
+  var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange=function() {
+    if (xhr.readyState == 4 && xhr.status == 200) {
+      console.log("response : " + xhr.responseText);
+      document.getElementById('log').innerHTML += xhr.responseText + "<br>";
+    }
+  }
+  var str = "php_server.php?cpu_temp=reboot";
+  xhr.open("GET",str, true);
+  xhr.send();
+}
+
+var interval;
+function forceShutdown() {
+  clearInterval(interval);
+  console.log(">> forceShutdown ");
+  var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange=function() {
+    if (xhr.readyState == 4 && xhr.status == 200) {
+      console.log("response : " + xhr.responseText);
+      document.getElementById('log').innerHTML += xhr.responseText + "<br>";
+    }
+  }
+  var str = "php_server.php?cpu_temp=overheat";
+  xhr.open("GET",str, true);
+  xhr.send();
+}
+
+function updateTemp() {
+  console.log("updateTemp");
+  var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange=function() {
+    if (xhr.readyState == 4 && xhr.status == 200) {
+      console.log("response " + xhr.responseText);
+      document.getElementById("cpu").value = xhr.responseText;
+      document.getElementById('log').innerHTML += xhr.responseText + "<br>";
+      var temp_num = parseFloat(xhr.responseText);
+      console.log("temp in num : " + temp_num);
+      if (temp_num  > 68) {
+        clearInterval(interval);
+        forceReboot();
+        //forceShutdown();
+      }
+    }
+  }
+  var str = "php_server.php?cpu_temp=req"
+  xhr.open("GET",str, true);
+  xhr.send();
+}
+interval = setInterval(updateTemp, 30000);
 </script>
 
 <div>
@@ -109,6 +161,13 @@ function reset() {
 
  <button class="buttonstyle" type="button" onclick="reset()">Reload Window</button><br>
 <div id="logger" style="position:absolute;left: 500px;top:50px "> </div>
+<br>
+<button class="buttonstyle" type="button" onclick="forceShutdown()">forceShutdown</button><br>
+<button class="buttonstyle" type="button" onclick="forceReboot()">forceReboot</button><br>
+
+cpu : <input id='cpu' type="text" value="readonly" readonly>
+
+<div id='log'></div>
 </body>
 
 </html>
