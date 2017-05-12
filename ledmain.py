@@ -76,9 +76,9 @@ setting = GPIOSetting()
 setting.setMode(GPIO.BOARD)
 setting.setWarnings(False)
 
-Led1 = Led(33)
-Led2 = Led(35)
-Led3 = Led(37)
+Led1 = Led(11)
+Led2 = Led(16)
+Led3 = Led(18)
 
 ledCtrl = LedControl()
 db = Database()
