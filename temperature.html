@@ -1,0 +1,63 @@
+<html>
+<head>
+  <title> raspberry temperature inspector </title>
+  <link rel="stylesheet" type="text/css" href="index.css" >
+  <link rel="icon" href="favicon.ico" type="image/x-icon" />
+<script>
+var interval = null;
+mode = 'req'; //default mode
+
+function sleepFor( sleepDuration ){
+    var now = new Date().getTime();
+    while(new Date().getTime() < now + sleepDuration){ /* do nothing */ }
+}
+
+function init() {
+  interval = setInterval(function() {
+    updateTemp("req");
+  }, 10000); //10 s check rp temerature
+}
+</script>
+</head>
+
+<body onload="init();">
+<script>
+function updateTemp(mode_) {
+  var xhr = new XMLHttpRequest();
+  xhr.onreadystatechange=function() {
+    if (xhr.readyState == 4 && xhr.status == 200) {
+      document.getElementById("cpu").value = xhr.responseText;
+      var temp_num = parseFloat(xhr.responseText);
+      console.log("current temperature : " + temp_num);
+    }
+  }
+  var str = "php_server_temp.php?cpu_temp=" + mode_;
+  console.log("send request : " + str);
+  xhr.open("GET",str, true);
+  xhr.send();
+}
+
+function cooldown(mode_) {
+  if (interval) {
+    clearInterval(interval);
+    interval = setInterval(function() {
+      updateTemp(mode_); //cooldown
+    }, 10000);    
+  }
+}
+
+</script>
+
+<button class="buttonstyle" type="button" onclick="reset()">Reload Window</button><br>
+<div id="logger" style="position:absolute;left: 500px;top:50px "> </div>
+<br>
+<button class="buttonstyle" type="button" onclick="cooldown('autorun')">-autorun-</button><br>
+<!--<button class="buttonstyle" type="button" onclick="forceShutdown()">forceShutdown</button><br>
+<button class="buttonstyle" type="button" onclick="forceReboot()">forceReboot</button><br>
+-->
+cpu : <input id='cpu' type="text" value="readonly" readonly>
+
+<div id='log'></div>
+</body>
+
+</html>
